@@ -1,0 +1,86 @@
+package z3roco01.blockful.render.mesh
+
+import org.joml.Matrix4f
+import org.lwjgl.opengl.GL33.*
+import org.lwjgl.system.MemoryUtil
+import org.lwjgl.system.MemoryUtil.memFree
+
+open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray) {
+    private var vaoId: Int = 0;
+    private var vertsVboId: Int = 0;
+    private var idxVboId: Int = 0;
+    private var colourVboId: Int = 0
+
+    fun init() {
+        // Create the vertex array object(vao) id and bind it
+        this.vaoId = glGenVertexArrays()
+        glBindVertexArray(this.vaoId)
+
+        // Create a buffer for the verticies and flip to reset to position
+        val vertBuf = MemoryUtil.memAllocFloat(verts.size)
+        vertBuf.put(verts).flip()
+
+        // create a vertex buffer object(vbo) id to store the vertices
+        this.vertsVboId = glGenBuffers()
+        glBindBuffer(GL_ARRAY_BUFFER, this.vertsVboId)
+        glBufferData(GL_ARRAY_BUFFER, vertBuf, GL_STATIC_DRAW)
+
+        memFree(vertBuf)
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+
+        val idxBuf = MemoryUtil.memAllocInt(indices.size)
+        idxBuf.put(indices).flip()
+        // create a index buffer to lower the elements in the vert array
+        this.idxVboId = glGenBuffers()
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.idxVboId)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxBuf, GL_STATIC_DRAW)
+
+        memFree(idxBuf)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+
+        // create the buffer for the colours
+        val colourBuf = MemoryUtil.memAllocFloat(colours.size)
+        colourBuf.put(colours).flip()
+
+        // create a vbo for the colours
+        this.colourVboId = glGenBuffers()
+        glBindBuffer(GL_ARRAY_BUFFER, this.colourVboId)
+        glBufferData(GL_ARRAY_BUFFER, colourBuf, GL_STATIC_DRAW)
+
+        memFree(colourBuf)
+
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0)
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+
+        glBindVertexArray(0)
+    }
+
+    fun render() {
+        glBindVertexArray(this.vaoId)
+        glEnableVertexAttribArray(0)
+        glEnableVertexAttribArray(1)
+
+        glDrawElements(GL_TRIANGLES, indices.size, GL_UNSIGNED_INT, 0)
+
+        glDisableVertexAttribArray(0)
+        glDisableVertexAttribArray(1)
+        glBindVertexArray(0)
+    }
+
+    fun fini() {
+        glDisableVertexAttribArray(0)
+
+        // unbind and delete the vbo
+        glBindBuffer(GL_ARRAY_BUFFER, 0)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
+        glDeleteBuffers(this.vertsVboId)
+        glDeleteBuffers(this.idxVboId)
+        glDeleteBuffers(this.colourVboId)
+
+        // do the same for the vao
+        glBindVertexArray(0)
+        glDeleteVertexArrays(this.vaoId)
+    }
+}
