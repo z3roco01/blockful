@@ -3,6 +3,7 @@ package z3roco01.blockful.render
 import org.joml.Math
 import org.joml.Matrix4f
 import org.lwjgl.glfw.GLFW.glfwInit
+import org.lwjgl.glfw.GLFW.glfwSetCursorPos
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.render.mesh.BlockMesh
