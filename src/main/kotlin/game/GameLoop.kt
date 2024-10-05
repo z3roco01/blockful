@@ -14,7 +14,7 @@ class GameLoop {
     private val inputHandler = InputHandler()
 
     fun run() {
-        System.out.println("LWJGL v" + Version.getVersion());
+        println("LWJGL v" + Version.getVersion());
 
         this.init();
         this.loop();

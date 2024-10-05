@@ -12,7 +12,7 @@ class MouseInputHandler {
     private var prevMousePos = Vector2d(-1.0, -1.0)
     private var curMousePos = Vector2d(0.0, 0.0)
     private var rotateVec = Vector2f(0f, 0f)
-    private var inWindow = false
+    private var inWindow = true
     private var leftButtonPressed = false
     private var rightButtonPressed = false
 
@@ -31,8 +31,8 @@ class MouseInputHandler {
         }
 
         glfwSetMouseButtonCallback(window.getId()) { windowId, button, action, mode ->
-            this.leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS
-            this.rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS
+            this.leftButtonPressed = (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
+            this.rightButtonPressed = (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
         }
     }
 
