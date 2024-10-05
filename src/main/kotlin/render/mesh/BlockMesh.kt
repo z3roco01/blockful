@@ -1,5 +1,9 @@
 package z3roco01.blockful.render.mesh
 
+/**
+ * a mesh with all the values needed to make a cube, just needs the colours supplied
+ * @param colours a [FloatArray] with colours for each index
+ */
 class BlockMesh(colours: FloatArray): Mesh(
     floatArrayOf(
          0.5f, -0.5f,  0.5f,
