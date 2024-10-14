@@ -14,7 +14,7 @@ class Camera(var position: Vector3f, var rotation: Vector3f) {
      * sets the position of the camera to the supplied coordinates
      * @param coords a [Vector3f] with the coordinates
      */
-    fun setPosition(coords: Vector3f) {
+    fun setPos(coords: Vector3f) {
         this.position = coords
     }
 
