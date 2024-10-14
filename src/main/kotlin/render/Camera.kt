@@ -11,14 +11,6 @@ class Camera(var position: Vector3f, var rotation: Vector3f) {
     constructor() : this(Vector3f(0f, 0f, 0f), Vector3f(0f, 0f, 0f))
 
     /**
-     * sets the position of the camera to the supplied coordinates
-     * @param coords a [Vector3f] with the coordinates
-     */
-    fun setPos(coords: Vector3f) {
-        this.position = coords
-    }
-
-    /**
      * moves the camera by the supplied vector
      * @param moveVec the [Vector3f] to move on
      */
@@ -32,15 +24,6 @@ class Camera(var position: Vector3f, var rotation: Vector3f) {
             this.position.z += Math.cos(Math.toRadians(this.rotation.y - 90f)) * moveVec.x
         }
         this.position.y += moveVec.y
-    }
-
-
-    /**
-     * sets the rotation to the supplied rotation
-     * @param rotation the [Vector3f] with the rotation
-     */
-    fun rotate(rotateVec: Vector3f) {
-        this.rotate(rotateVec.x, rotateVec.y, rotateVec.z)
     }
 
     /**
