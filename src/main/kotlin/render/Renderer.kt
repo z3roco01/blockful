@@ -1,7 +1,5 @@
 package z3roco01.blockful.render
 
-import org.joml.Math
-import org.joml.Matrix4f
 import org.lwjgl.glfw.GLFW.glfwInit
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
@@ -26,14 +24,7 @@ class Renderer {
         1.0f, 1.0f, 1.0f,
         0.5f, 0.25f, 0.5f,
     )
-    // the cameras fov in radians
-    private val FOV: Float = Math.toRadians(90.0f)
-    // the near clipping plane
-    private val Z_NEAR = 0.01f
-    // and the far clipping plane
-    private val Z_FAR = 1000f
     // the projection matrix for the camera
-    private lateinit var projMatrix: Matrix4f
     private val mesh = BlockMesh(colours)
 
     fun init() {
@@ -46,11 +37,9 @@ class Renderer {
         this.shader.init()
         this.mesh.init()
 
-        // create the projection matrix
-        this.projMatrix = Matrix4f().perspective(FOV, this.window.getAspectRatio(), Z_NEAR, Z_FAR)
-
-        // create a uniform for the projection matrix
+        // create a uniform for the projection and matrices
         this.shader.createUniformLocation("projMatrix")
+        this.shader.createUniformLocation("worldMatrix")
     }
 
     /**
@@ -68,12 +57,6 @@ class Renderer {
     }
 
     /**
-     * recalculates the projection matrix then returns it
-     * @return the calculated projection matrix
-     */
-    fun getProjectionMatrix() = Matrix4f().perspective(FOV, this.window.getAspectRatio(), Z_NEAR, Z_FAR)
-
-    /**
      * actually renders everything
      * @param camera the [Camera] for it
      */
@@ -84,7 +67,7 @@ class Renderer {
         // bind the shader
         this.shader.bind()
         // set the projection matrix, multiplied by the cameras view matrix
-        this.shader.setUniform("projMatrix", this.getProjectionMatrix().mul(camera.getViewMatrix()))
+        this.shader.setUniform("projMatrix", camera.getProjectionMatrix(window.getAspectRatio()))
 
         this.mesh.render()
 

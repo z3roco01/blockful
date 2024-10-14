@@ -3,12 +3,29 @@ package z3roco01.blockful.render
 import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Vector3f
+import game.gameobject.GameObject
+import game.gameobject.Transformation
 
 /**
  * the camera for the game, handles projection of the view, etc
  */
-class Camera(var position: Vector3f, var rotation: Vector3f) {
-    constructor() : this(Vector3f(0f, 0f, 0f), Vector3f(0f, 0f, 0f))
+class Camera(transform: Transformation): GameObject(transform) {
+    constructor(position: Vector3f, rotation: Vector3f): this(Transformation(position, rotation, 1f))
+    constructor() : this(Transformation())
+
+    // the cameras fov in radians
+    val fov: Float = Math.toRadians(90.0f)
+    // the near clipping plane
+    val zNear = 0.01f
+    // and the far clipping plane
+    val zFar = 1000f
+
+    /**
+     * calculates the perspective matrix then multiplies it by the view matrix from [getViewMatrix]
+     * @param aspectRatio the aspect ratio of the camera
+     * @return the calculated projection matrix
+     */
+    fun getProjectionMatrix(aspectRatio: Float) = Matrix4f().perspective(fov, aspectRatio, zNear, zFar).mul(getViewMatrix())
 
     /**
      * moves the camera by the supplied vector
@@ -16,14 +33,14 @@ class Camera(var position: Vector3f, var rotation: Vector3f) {
      */
     fun move(moveVec: Vector3f) {
         if(moveVec.z != 0f) {
-            this.position.x += -Math.sin(Math.toRadians(this.rotation.y)) * moveVec.z
-            this.position.z += Math.cos(Math.toRadians(this.rotation.y)) * moveVec.z
+            this.transformation.position.x += -Math.sin(Math.toRadians(this.transformation.rotation.y)) * moveVec.z
+            this.transformation.position.z += Math.cos(Math.toRadians(this.transformation.rotation.y)) * moveVec.z
         }
         if(moveVec.x != 0f) {
-            this.position.x += -Math.sin(Math.toRadians(this.rotation.y - 90f)) * moveVec.x
-            this.position.z += Math.cos(Math.toRadians(this.rotation.y - 90f)) * moveVec.x
+            this.transformation.position.x += -Math.sin(Math.toRadians(this.transformation.rotation.y - 90f)) * moveVec.x
+            this.transformation.position.z += Math.cos(Math.toRadians(this.transformation.rotation.y - 90f)) * moveVec.x
         }
-        this.position.y += moveVec.y
+        this.transformation.position.y += moveVec.y
     }
 
     /**
@@ -33,25 +50,18 @@ class Camera(var position: Vector3f, var rotation: Vector3f) {
      * @param z the rotation on the z
      */
     fun rotate(x: Float, y: Float, z: Float) {
-        rotation.x += x
-        rotation.y += y
-        rotation.z += z
+        this.transformation.rotation.x += x
+        this.transformation.rotation.y += y
+        this.transformation.rotation.z += z
     }
 
     /**
      * makes and returns the view matrix for this camera
      * @return the view matrix in a [Matrix4f]
      */
-    fun getViewMatrix(): Matrix4f {
-        val viewMatrix = Matrix4f()
-        viewMatrix.identity()
-
-        viewMatrix.rotate(Math.toRadians(this.rotation.x), Vector3f(1f, 0f, 0f))
-            .rotate(Math.toRadians(this.rotation.y), Vector3f(0f, 1f, 0f))
-            .rotate(Math.toRadians(this.rotation.z), Vector3f(0f, 0f, 1f))
-
-        viewMatrix.translate(-this.position.x, -this.position.y, -this.position.z)
-
-        return viewMatrix
-    }
+    fun getViewMatrix() = Matrix4f()
+        .rotate(Math.toRadians(this.transformation.rotation.x), Vector3f(1f, 0f, 0f))
+        .rotate(Math.toRadians(this.transformation.rotation.y), Vector3f(0f, 1f, 0f))
+        .rotate(Math.toRadians(this.transformation.rotation.z), Vector3f(0f, 0f, 1f))
+        .translate(-this.transformation.position.x, -this.transformation.position.y, -this.transformation.position.z)
 }

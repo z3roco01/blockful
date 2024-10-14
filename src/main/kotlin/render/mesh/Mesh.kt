@@ -1,16 +1,18 @@
 package z3roco01.blockful.render.mesh
 
+import game.gameobject.GameObject
 import org.lwjgl.opengl.GL33.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.memFree
 
 /**
  * a class for each mesh, handles the initialization and rendering of it
+ * also handles the transformation and projection of it
  * @param verts a [FloatArray] containing the positions of every vertex
  * @param indices a [IntArray] containing the indices from the verts for each vertex
  * @param colours a [FloatArray] containing the colours for each index
  */
-open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray) {
+open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray): GameObject() {
     private var vaoId: Int = 0
     private var vertsVboId: Int = 0
     private var idxVboId: Int = 0

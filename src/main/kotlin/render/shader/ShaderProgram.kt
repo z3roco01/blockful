@@ -66,7 +66,7 @@ class ShaderProgram(vertName: String, fragName: String) {
         // attempt to create the id with the supplied name
         val uniformId = glGetUniformLocation(this.programId, uniformName)
         // if it cannot, throw an exception
-        if(uniformId < 0) throw IllegalStateException("could not create uniform for :$uniformName :(")
+        if(uniformId < 0) throw IllegalStateException("could not create uniform for : $uniformName :(")
 
         // map the uniform name to its id
         uniformMap.put(uniformName, uniformId)
