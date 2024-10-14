@@ -26,7 +26,7 @@ open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: Float
         this.vaoId = glGenVertexArrays()
         glBindVertexArray(this.vaoId)
 
-        // Create a buffer for the verticies and flip to reset to position
+        // Create a buffer for the vertices and flip to reset to position
         val vertBuf = MemoryUtil.memAllocFloat(verts.size)
         vertBuf.put(verts).flip()
 

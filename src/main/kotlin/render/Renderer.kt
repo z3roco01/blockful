@@ -66,9 +66,10 @@ class Renderer {
 
         // bind the shader
         this.shader.bind()
-        // set the projection matrix, multiplied by the cameras view matrix
+        // set the projection matrix to the cameras projection matrix
         this.shader.setUniform("projMatrix", camera.getProjectionMatrix(window.getAspectRatio()))
 
+        this.shader.setUniform("worldMatrix", mesh.transformation.getWorldMatrix())
         this.mesh.render()
 
         // unbind the shader
