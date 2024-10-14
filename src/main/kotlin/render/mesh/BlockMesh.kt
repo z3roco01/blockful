@@ -30,6 +30,4 @@ class BlockMesh(colours: FloatArray): Mesh(
         5, 4, 0
     ),
     colours
-) {
-
-}
+)

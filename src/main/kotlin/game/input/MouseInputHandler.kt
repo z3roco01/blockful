@@ -81,7 +81,7 @@ class MouseInputHandler {
         rotateVec.zero()
 
         // recalculate the rotate vector, stays zero if the mouse has not moved
-        if(prevMousePos.x > 0 && prevMousePos.y > 0 && inWindow) {
+        if(prevMousePos.x > 0 || prevMousePos.y > 0) {
             val deltaX = curMousePos.x - prevMousePos.x
             val deltaY = curMousePos.y - prevMousePos.y
 
@@ -95,7 +95,9 @@ class MouseInputHandler {
         prevMousePos.y = curMousePos.y
 
         // rotate the camera, apply the sensitivity to the rotation and clamp the y rotation to 180 degrees total
-        camera.rotate(rotateVec.x * mouseSensitivity, Math.clamp(rotateVec.y * mouseSensitivity, -90f, 90f), 0f)
+        camera.rotate(rotateVec.x * mouseSensitivity, rotateVec.y * mouseSensitivity, 0f)
 
+        // make sure to clamp the pitch between completely up and completely down
+        camera.transformation.rotation.x = Math.clamp(-90f, 90f, camera.transformation.rotation.x)
     }
 }
