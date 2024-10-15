@@ -55,8 +55,8 @@ class Shader(val name: String, val shaderType: Int) {
      */
     private fun getPath(): String {
         if(shaderType == GL_VERTEX_SHADER)
-            return "/shaders/vertex/$name.vsh"
+            return "/shaders/vertex/$name.vert"
         else
-            return "/shaders/fragment/$name.fsh"
+            return "/shaders/fragment/$name.frag"
     }
 }
