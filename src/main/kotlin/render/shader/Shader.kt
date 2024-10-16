@@ -25,13 +25,14 @@ class Shader(val name: String, val shaderType: Int) {
 
         // tries the read the shader code
         val shaderCode = ResourceUtil.getResourceContents(path)
+        println(shaderCode)
         // if it cannot throw an exception
         if(shaderCode == null) throw IllegalStateException("couldnt read shader $path :(")
 
         // set the source of the shader to the read code
         glShaderSource(this.id, shaderCode)
         // compile the shader, supplying the type
-        glCompileShader(this.shaderType)
+        glCompileShader(this.id)
 
         // > 0 clause added to prevent random errors that arent actual errors
         if(glGetShaderi(this.id, GL_COMPILE_STATUS) == GL_FALSE && glGetShaderInfoLog(this.id, 1024).isNotEmpty())
