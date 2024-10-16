@@ -3,7 +3,6 @@ package z3roco01.blockful.game
 import org.lwjgl.Version
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.glfw.GLFWErrorCallback
-import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.game.input.InputHandler
 import z3roco01.blockful.render.Camera
 import z3roco01.blockful.render.Renderer
@@ -42,7 +41,6 @@ class GameLoop {
      * also clears the screen and polls events
      */
     fun loop() {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         // run until the window is set to close
         while(!this.renderer.windowShouldClose()) {

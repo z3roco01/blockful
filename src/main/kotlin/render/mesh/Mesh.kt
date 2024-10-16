@@ -4,6 +4,7 @@ import game.gameobject.GameObject
 import org.lwjgl.opengl.GL33.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.memFree
+import z3roco01.blockful.render.Renderable
 
 /**
  * a class for each mesh, handles the initialization and rendering of it
@@ -12,7 +13,7 @@ import org.lwjgl.system.MemoryUtil.memFree
  * @param indices a [IntArray] containing the indices from the verts for each vertex
  * @param colours a [FloatArray] containing the colours for each index
  */
-open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray): GameObject() {
+open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray): GameObject(), Renderable {
     private var vaoId: Int = 0
     private var vertsVboId: Int = 0
     private var idxVboId: Int = 0
@@ -21,7 +22,7 @@ open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: Float
     /**
      * called before it can be rendered,
      */
-    fun init() {
+    override fun init() {
         // Create the vertex array object(vao) id and bind it
         this.vaoId = glGenVertexArrays()
         glBindVertexArray(this.vaoId)
@@ -75,7 +76,7 @@ open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: Float
     /**
      * handles the rendering of the mesh
      */
-    fun render() {
+    override fun render() {
         // bind this meshes vertex array
         glBindVertexArray(this.vaoId)
         // enable the position and colour attributes
@@ -95,7 +96,7 @@ open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: Float
     /**
      * free all memory and unbind/destroy everything, called once this mesh is no longer used
      */
-    fun fini() {
+    override fun fini() {
         glDisableVertexAttribArray(0)
 
         // unbind and delete the vbo

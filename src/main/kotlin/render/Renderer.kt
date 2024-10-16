@@ -3,7 +3,8 @@ package z3roco01.blockful.render
 import org.lwjgl.glfw.GLFW.glfwInit
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
-import z3roco01.blockful.render.mesh.BlockMesh
+import z3roco01.blockful.game.Chunk
+import z3roco01.blockful.render.mesh.Mesh
 import z3roco01.blockful.render.shader.ShaderProgram
 
 /**
@@ -14,18 +15,33 @@ class Renderer {
     val window = Window()
     // the shader program
     private val shader = ShaderProgram("main")
-    private val colours: FloatArray = floatArrayOf(
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        0.5f, 0.25f, 0.5f,
+
+    private val testMesh = Mesh(
+
+        floatArrayOf(
+             0.5f, -0.5f,   0.5f,
+            -0.5f,  0.5f,   0.5f,
+            -0.5f, -0.5f,   0.5f,
+             0.5f,  0.5f,   0.5f,
+             0.5f,  0.5f,  -0.5f,
+            -0.5f,  0.5f,  -0.5f,
+        ),
+        intArrayOf(
+            0, 1, 2,
+            0, 3, 1,
+            1, 3, 4,
+            4, 5, 1
+        ),
+        floatArrayOf(
+            0.46484375f, 0.86328125f, 0.46484375f,
+            0.46484375f, 0.86328125f, 0.46484375f,
+            0.46484375f, 0.86328125f, 0.46484375f,
+            0.46484375f, 0.86328125f, 0.46484375f,
+            0.46484375f, 0.86328125f, 0.46484375f,
+            0.46484375f, 0.86328125f, 0.46484375f,
+        )
     )
-    // the projection matrix for the camera
-    private val mesh = BlockMesh(colours)
+    private val chunk = Chunk(0, 0)
 
     fun init() {
         // if it cannot init glfw, throw
@@ -35,7 +51,11 @@ class Renderer {
         // init everything
         this.window.init()
         this.shader.init()
-        this.mesh.init()
+        this.testMesh.init()
+        this.chunk.init()
+        this.testMesh.transformation.position.z -= 5
+
+        glClearColor(0.785f, 0.7890625f, 0.91796875f, 1.0f)
 
         // create a uniform for the projection and matrices
         this.shader.createUniformLocation("projMatrix")
@@ -69,8 +89,8 @@ class Renderer {
         // set the projection matrix to the cameras projection matrix
         this.shader.setUniform("projMatrix", camera.getProjectionMatrix(window.getAspectRatio()))
 
-        this.shader.setUniform("worldMatrix", mesh.transformation.getWorldMatrix())
-        this.mesh.render()
+        this.shader.setUniform("worldMatrix", this.chunk.mesh.transformation.getWorldMatrix())
+        this.chunk.render()
 
         // unbind the shader
         this.shader.unbind()
@@ -83,7 +103,8 @@ class Renderer {
      */
     fun fini() {
         this.shader.fini()
-        this.mesh.fini()
+        this.testMesh.fini()
+        this.chunk.fini()
         this.window.fini()
     }
 }
