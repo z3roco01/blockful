@@ -22,6 +22,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         0.5f,  0.5f, -0.5f,
     )
     val indices = intArrayOf(
+        0, 1, 2
     )
     val colours = floatArrayOf(
         0.46484375f, 0.86328125f, 0.46484375f,

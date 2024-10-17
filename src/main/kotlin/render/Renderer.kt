@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW.glfwInit
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.game.Chunk
+import z3roco01.blockful.math.Colour
 import z3roco01.blockful.render.mesh.Mesh
 import z3roco01.blockful.render.shader.ShaderProgram
 
@@ -13,6 +14,8 @@ import z3roco01.blockful.render.shader.ShaderProgram
 class Renderer {
     // the window for the game
     val window = Window()
+    // colour used in glClearColor
+    val clearColour = Colour(0x9D, 0xCA, 0xEB)
     // the shader program
     private val shader = ShaderProgram("main")
 
@@ -52,7 +55,8 @@ class Renderer {
         this.shader.init()
         this.chunk.init()
 
-        glClearColor(0.785f, 0.7890625f, 0.91796875f, 1.0f)
+        println("${clearColour.r} ${clearColour.g} ${clearColour.b}")
+        glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
         // create a uniform for the projection and matrices
         this.shader.createUniformLocation("projMatrix")
