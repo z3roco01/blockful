@@ -11,40 +11,49 @@ import z3roco01.blockful.render.mesh.Mesh
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     val blocks = Array<Array<Boolean>>(16){ Array<Boolean>(16){true} }
 
-    val verts = floatArrayOf(
-        0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
-        0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        0.5f,  0.5f, -0.5f,
+    var verts = floatArrayOf(
     )
-    val indices = intArrayOf(
-        0, 1, 2
+    var indices = intArrayOf(
     )
     val colours = floatArrayOf(
-        0.46484375f, 0.86328125f, 0.46484375f,
-        0.46484375f, 0.86328125f, 0.46484375f,
-        0.46484375f, 0.86328125f, 0.46484375f,
-        0.46484375f, 0.86328125f, 0.46484375f,
-        0.46484375f, 0.86328125f, 0.46484375f,
-        0.46484375f, 0.86328125f, 0.46484375f,
     )
     val mesh = Mesh(verts, indices, colours)
 
     override fun init() {
         for(x in 0..15){
             for(y in 0..15) {
-                blocks[x][y]
+                addVoxel(x, y)
             }
         }
         this.mesh.init()
     }
 
-    private fun makeVoxel(x: Int, y: Int) {
-
+    private fun addVoxel(x: Int, y: Int) {
+        var indicesOffset = mesh.verts.size/3
+        mesh.indices += intArrayOf(
+            2+indicesOffset, 1+indicesOffset, 0+indicesOffset,
+            3+indicesOffset, 2+indicesOffset, 0+indicesOffset,
+            1+indicesOffset, 2+indicesOffset, 5+indicesOffset,
+            2+indicesOffset, 6+indicesOffset, 5+indicesOffset,
+            5+indicesOffset, 6+indicesOffset, 4+indicesOffset,
+            6+indicesOffset, 7+indicesOffset, 4+indicesOffset,
+            4+indicesOffset, 7+indicesOffset, 0+indicesOffset,
+            7+indicesOffset, 3+indicesOffset, 0+indicesOffset,
+            2+indicesOffset, 3+indicesOffset, 7+indicesOffset,
+            7+indicesOffset, 6+indicesOffset, 2+indicesOffset,
+            1+indicesOffset, 5+indicesOffset, 0+indicesOffset,
+            5+indicesOffset, 4+indicesOffset, 0+indicesOffset
+        )
+        mesh.verts += floatArrayOf(
+             0.5f+x, -0.5f,  0.5f+y,
+            -0.5f+x, -0.5f,  0.5f+y,
+            -0.5f+x,  0.5f,  0.5f+y,
+             0.5f+x,  0.5f,  0.5f+y,
+             0.5f+x, -0.5f, -0.5f+y,
+            -0.5f+x, -0.5f, -0.5f+y,
+            -0.5f+x,  0.5f, -0.5f+y,
+             0.5f+x,  0.5f, -0.5f+y,
+        )
     }
 
     override fun render() = this.mesh.render()

@@ -10,5 +10,5 @@ uniform mat4 worldMatrix;
 
 void main() {
     gl_Position = projMatrix * worldMatrix * vec4(pos, 1.0);
-    vertColour = inColour;
+    vertColour = vec3(0.46484375f, 0.86328125f, 0.46484375f);
 }

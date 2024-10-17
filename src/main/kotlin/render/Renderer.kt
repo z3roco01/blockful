@@ -19,30 +19,6 @@ class Renderer {
     // the shader program
     private val shader = ShaderProgram("main")
 
-    private val testMesh = Mesh(
-        floatArrayOf(
-             0.5f, -0.5f,   0.5f,
-            -0.5f,  0.5f,   0.5f,
-            -0.5f, -0.5f,   0.5f,
-             0.5f,  0.5f,   0.5f,
-             0.5f,  0.5f,  -0.5f,
-            -0.5f,  0.5f,  -0.5f,
-        ),
-        intArrayOf(
-            0, 1, 2,
-            0, 3, 1,
-            1, 3, 4,
-            4, 5, 1
-        ),
-        floatArrayOf(
-            0.46484375f, 0.86328125f, 0.46484375f,
-            0.46484375f, 0.86328125f, 0.46484375f,
-            0.46484375f, 0.86328125f, 0.46484375f,
-            0.46484375f, 0.86328125f, 0.46484375f,
-            0.46484375f, 0.86328125f, 0.46484375f,
-            0.46484375f, 0.86328125f, 0.46484375f,
-        )
-    )
     private val chunk = Chunk(0, 0)
 
     fun init() {
@@ -55,7 +31,7 @@ class Renderer {
         this.shader.init()
         this.chunk.init()
 
-        println("${clearColour.r} ${clearColour.g} ${clearColour.b}")
+        println("${clearColour.rFloat()} ${clearColour.gFloat()} ${clearColour.bFloat()}")
         glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
         // create a uniform for the projection and matrices

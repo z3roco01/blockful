@@ -13,7 +13,7 @@ import z3roco01.blockful.render.Renderable
  * @param indices a [IntArray] containing the indices from the verts for each vertex
  * @param colours a [FloatArray] containing the colours for each index
  */
-open class Mesh(val verts: FloatArray, val indices: IntArray, val colours: FloatArray): GameObject(), Renderable {
+open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: FloatArray): GameObject(), Renderable {
     private var vaoId: Int = 0
     private var vertsVboId: Int = 0
     private var idxVboId: Int = 0
