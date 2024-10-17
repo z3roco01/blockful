@@ -11,13 +11,7 @@ import z3roco01.blockful.render.mesh.Mesh
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     val blocks = Array<Array<Boolean>>(16){ Array<Boolean>(16){true} }
 
-    var verts = floatArrayOf(
-    )
-    var indices = intArrayOf(
-    )
-    val colours = floatArrayOf(
-    )
-    val mesh = Mesh(verts, indices, colours)
+    val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf())
 
     override fun init() {
         for(x in 0..15){
@@ -27,6 +21,23 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         }
 
         this.mesh.init()
+    }
+
+    /**
+     * rebuilds the mesh based on [Chunk.blocks] by using [Mesh.updateMesh] and [Chunk.addVoxel]
+     */
+    fun rebuildMesh() {
+        // empty arrays
+        this.mesh.indices = intArrayOf()
+        this.mesh.verts = floatArrayOf()
+
+        // loop over each voxel
+        for(x in 0..15) {
+            for(y in 0..15)
+                addVoxel(x, y)
+        }
+
+        this.mesh.updateMesh()
     }
 
     /**
