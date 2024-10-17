@@ -25,25 +25,53 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 addVoxel(x, y)
             }
         }
+
         this.mesh.init()
     }
 
+    /**
+     * adds a voxel to the mesh at the supplied coords
+     * @param x the x part of the coordinates
+     * @param y the y part of the coordinates
+     */
     private fun addVoxel(x: Int, y: Int) {
         var indicesOffset = mesh.verts.size/3
+
         mesh.indices += intArrayOf(
-            2+indicesOffset, 1+indicesOffset, 0+indicesOffset,
-            3+indicesOffset, 2+indicesOffset, 0+indicesOffset,
-            1+indicesOffset, 2+indicesOffset, 5+indicesOffset,
-            2+indicesOffset, 6+indicesOffset, 5+indicesOffset,
-            5+indicesOffset, 6+indicesOffset, 4+indicesOffset,
-            6+indicesOffset, 7+indicesOffset, 4+indicesOffset,
-            4+indicesOffset, 7+indicesOffset, 0+indicesOffset,
-            7+indicesOffset, 3+indicesOffset, 0+indicesOffset,
+            // top face
             2+indicesOffset, 3+indicesOffset, 7+indicesOffset,
             7+indicesOffset, 6+indicesOffset, 2+indicesOffset,
+
+            // bottom face
             1+indicesOffset, 5+indicesOffset, 0+indicesOffset,
             5+indicesOffset, 4+indicesOffset, 0+indicesOffset
         )
+
+        if(!getBlock(x-1, y))
+            mesh.indices += intArrayOf(
+                // left face
+                1+indicesOffset, 2+indicesOffset, 5+indicesOffset,
+                2+indicesOffset, 6+indicesOffset, 5+indicesOffset,
+            )
+        if(!getBlock(x+1, y))
+            mesh.indices += intArrayOf(
+                // right face
+                4+indicesOffset, 7+indicesOffset, 0+indicesOffset,
+                7+indicesOffset, 3+indicesOffset, 0+indicesOffset,
+            )
+        if(!getBlock(x, y-1))
+            mesh.indices += intArrayOf(
+                // back face
+                5+indicesOffset, 6+indicesOffset, 4+indicesOffset,
+                6+indicesOffset, 7+indicesOffset, 4+indicesOffset,
+            )
+        if(!getBlock(x, y+1))
+            mesh.indices += intArrayOf(
+                // front face
+                2+indicesOffset, 1+indicesOffset, 0+indicesOffset,
+                3+indicesOffset, 2+indicesOffset, 0+indicesOffset,
+            )
+
         mesh.verts += floatArrayOf(
              0.5f+x, -0.5f,  0.5f+y,
             -0.5f+x, -0.5f,  0.5f+y,
@@ -54,6 +82,17 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             -0.5f+x,  0.5f, -0.5f+y,
              0.5f+x,  0.5f, -0.5f+y,
         )
+    }
+
+    /**
+     * gets the block at the supplied coordinates, return air when invalid coords
+     * @param x the x part of the coordinates
+     * @param y the y part of the coordinates
+     */
+    fun getBlock(x: Int, y: Int): Boolean {
+        if(x > 15 || x < 0 || y > 15 || y < 0) return false
+
+        return blocks[x][y]
     }
 
     override fun render() = this.mesh.render()

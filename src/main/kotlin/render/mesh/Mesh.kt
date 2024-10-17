@@ -27,12 +27,20 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         this.vaoId = glGenVertexArrays()
         glBindVertexArray(this.vaoId)
 
+        // create vbos for all the attributes
+        this.vertsVboId = glGenBuffers()
+        this.idxVboId = glGenBuffers()
+        this.colourVboId = glGenBuffers()
+
+        updateMesh()
+    }
+
+    fun updateMesh() {
         // Create a buffer for the vertices and flip to reset to position
         val vertBuf = MemoryUtil.memAllocFloat(verts.size)
         vertBuf.put(verts).flip()
 
         // create a vertex buffer object(vbo) id to store the vertices
-        this.vertsVboId = glGenBuffers()
         glBindBuffer(GL_ARRAY_BUFFER, this.vertsVboId)
         glBufferData(GL_ARRAY_BUFFER, vertBuf, GL_STATIC_DRAW)
 
@@ -47,7 +55,6 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         idxBuf.put(indices).flip()
 
         // create a index buffer to lower the elements in the vert array
-        this.idxVboId = glGenBuffers()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.idxVboId)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, idxBuf, GL_STATIC_DRAW)
 
@@ -60,15 +67,10 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         colourBuf.put(colours).flip()
 
         // create a vbo for the colours
-        this.colourVboId = glGenBuffers()
         glBindBuffer(GL_ARRAY_BUFFER, this.colourVboId)
         glBufferData(GL_ARRAY_BUFFER, colourBuf, GL_STATIC_DRAW)
 
         memFree(colourBuf)
-
-        // make an attribute pointer for the colour
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0)
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
 
         glBindVertexArray(0)
     }
