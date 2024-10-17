@@ -17,7 +17,6 @@ class Renderer {
     private val shader = ShaderProgram("main")
 
     private val testMesh = Mesh(
-
         floatArrayOf(
              0.5f, -0.5f,   0.5f,
             -0.5f,  0.5f,   0.5f,
@@ -51,9 +50,7 @@ class Renderer {
         // init everything
         this.window.init()
         this.shader.init()
-        this.testMesh.init()
         this.chunk.init()
-        this.testMesh.transformation.position.z -= 5
 
         glClearColor(0.785f, 0.7890625f, 0.91796875f, 1.0f)
 
@@ -103,7 +100,6 @@ class Renderer {
      */
     fun fini() {
         this.shader.fini()
-        this.testMesh.fini()
         this.chunk.fini()
         this.window.fini()
     }

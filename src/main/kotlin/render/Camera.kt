@@ -4,7 +4,7 @@ import org.joml.Math
 import org.joml.Matrix4f
 import org.joml.Vector3f
 import game.gameobject.GameObject
-import game.gameobject.Transformation
+import z3roco01.blockful.math.Transformation
 
 /**
  * the camera for the game, handles projection of the view, etc
@@ -33,14 +33,14 @@ class Camera(transform: Transformation): GameObject(transform) {
      */
     fun move(moveVec: Vector3f) {
         if(moveVec.z != 0f) {
-            this.transformation.position.x += -Math.sin(Math.toRadians(this.transformation.rotation.y)) * moveVec.z
-            this.transformation.position.z += Math.cos(Math.toRadians(this.transformation.rotation.y)) * moveVec.z
+            transformation.position.x += -Math.sin(Math.toRadians(transformation.rotation.y)) * moveVec.z
+            transformation.position.z += Math.cos(Math.toRadians(transformation.rotation.y)) * moveVec.z
         }
         if(moveVec.x != 0f) {
-            this.transformation.position.x += -Math.sin(Math.toRadians(this.transformation.rotation.y - 90f)) * moveVec.x
-            this.transformation.position.z += Math.cos(Math.toRadians(this.transformation.rotation.y - 90f)) * moveVec.x
+            transformation.position.x += -Math.sin(Math.toRadians(transformation.rotation.y - 90f)) * moveVec.x
+            transformation.position.z += Math.cos(Math.toRadians(transformation.rotation.y - 90f)) * moveVec.x
         }
-        this.transformation.position.y += moveVec.y
+        transformation.position.y += moveVec.y
     }
 
     /**
@@ -50,9 +50,9 @@ class Camera(transform: Transformation): GameObject(transform) {
      * @param z the rotation on the z
      */
     fun rotate(x: Float, y: Float, z: Float) {
-        this.transformation.rotation.x += x
-        this.transformation.rotation.y += y
-        this.transformation.rotation.z += z
+        transformation.rotation.x += x
+        transformation.rotation.y += y
+        transformation.rotation.z += z
     }
 
     /**
@@ -60,8 +60,8 @@ class Camera(transform: Transformation): GameObject(transform) {
      * @return the view matrix in a [Matrix4f]
      */
     fun getViewMatrix() = Matrix4f()
-        .rotate(Math.toRadians(this.transformation.rotation.x), Vector3f(1f, 0f, 0f))
-        .rotate(Math.toRadians(this.transformation.rotation.y), Vector3f(0f, 1f, 0f))
-        .rotate(Math.toRadians(this.transformation.rotation.z), Vector3f(0f, 0f, 1f))
-        .translate(-this.transformation.position.x, -this.transformation.position.y, -this.transformation.position.z)
+        .rotate(Math.toRadians(transformation.rotation.x), Vector3f(1f, 0f, 0f))
+        .rotate(Math.toRadians(transformation.rotation.y), Vector3f(0f, 1f, 0f))
+        .rotate(Math.toRadians(transformation.rotation.z), Vector3f(0f, 0f, 1f))
+        .translate(-transformation.position.x, -transformation.position.y, -transformation.position.z)
 }

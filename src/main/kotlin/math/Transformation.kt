@@ -1,4 +1,4 @@
-package game.gameobject
+package z3roco01.blockful.math
 
 import org.joml.Math
 import org.joml.Matrix4f
