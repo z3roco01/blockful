@@ -1,5 +1,6 @@
 package z3roco01.blockful.game
 
+import org.joml.Vector3i
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.mesh.Mesh
 
@@ -9,7 +10,7 @@ import z3roco01.blockful.render.mesh.Mesh
  * @param chunkY the y coordinate of the chunk
  */
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
-    val blocks = Array(128){Array(16){Array(16){true}}}
+    private val blocks = Array(128){Array(16){Array(16){true}}}
 
     val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf())
 
@@ -127,6 +128,27 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
 
         return blocks[y][x][z]
     }
+
+    /**
+     * sets the block at the supplied coordinate to the supplied value
+     * @param x the x part of the coordinate
+     * @param y the y part of the coordinate
+     * @param z the z part of the coordinate
+     * @param newBlock the new block state
+     */
+    fun setBlock(x: Int, y: Int, z: Int, newBlock: Boolean) {
+        // check that its in bounds of the chunk
+        if(x > 15 || x < 0 || y > 127 || y < 0 || z > 15 || z < 0) return
+
+        blocks[y][x][z] = newBlock
+    }
+
+    /**
+     * same as [Chunk.setBlock] but it takes a vector
+     * @param coords the [Vector3i] holding the coordinates
+     * @param newBlock the new block state
+     */
+    fun setBlock(coords: Vector3i, newBlock: Boolean) = setBlock(coords.x, coords.y, coords.z, newBlock)
 
     override fun render() = this.mesh.render()
 
