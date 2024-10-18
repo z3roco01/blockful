@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW.glfwInit
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.game.Chunk
+import z3roco01.blockful.game.ChunkManager
 import z3roco01.blockful.math.Colour
 import z3roco01.blockful.render.shader.ShaderProgram
 
@@ -16,10 +17,11 @@ class Renderer {
     // colour used in glClearColor
     val clearColour = Colour(0x9D, 0xCA, 0xEB)
     // the shader program
-    private val shader = ShaderProgram("main")
+    val shader = ShaderProgram("main")
 
     private val chunk = Chunk(0, 0)
     private val chunk2 = Chunk(2, 2)
+    private val chunkManager = ChunkManager()
 
     fun init() {
         // if it cannot init glfw, throw
@@ -29,12 +31,11 @@ class Renderer {
         // init everything
         this.window.init()
         this.shader.init()
-        this.chunk.init()
-        this.chunk2.init()
+        this.chunkManager.init()
 
         glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
-        // create a uniform for the projection and matrices
+        // create a uniform for the projection and world matrices
         this.shader.createUniformLocation("projMatrix")
         this.shader.createUniformLocation("worldMatrix")
     }
@@ -66,11 +67,7 @@ class Renderer {
         // set the projection matrix to the cameras projection matrix
         this.shader.setUniform("projMatrix", camera.getProjectionMatrix(window.getAspectRatio()))
 
-        this.shader.setUniform("worldMatrix", this.chunk.mesh.transformation.getWorldMatrix())
-        this.chunk.render()
-
-        this.shader.setUniform("worldMatrix", this.chunk2.mesh.transformation.getWorldMatrix())
-        this.chunk2.render()
+        this.chunkManager.render(this)
 
         // unbind the shader
         this.shader.unbind()
@@ -82,8 +79,8 @@ class Renderer {
      * handles the closing of everything
      */
     fun fini() {
+        this.chunkManager.fini()
         this.shader.fini()
-        this.chunk.fini()
         this.window.fini()
     }
 }

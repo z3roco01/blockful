@@ -2,6 +2,7 @@ package z3roco01.blockful.game
 
 import org.joml.Vector3i
 import z3roco01.blockful.render.Renderable
+import z3roco01.blockful.render.Renderer
 import z3roco01.blockful.render.mesh.Mesh
 
 /**
@@ -13,6 +14,12 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     private val blocks = Array(128){Array(16){Array(16){true}}}
 
     val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf())
+
+    init {
+        // add the chunk position to the transform
+        this.mesh.transformation.position.x += chunkX*16
+        this.mesh.transformation.position.z += chunkY*16
+    }
 
     override fun init() {
         addAllVoxels()
@@ -103,21 +110,17 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             )
         }
 
-        // add the chunk offset times 16 since chunks are 16 blocks on the x and z
-        val xVertOff = x+chunkX*16
-        val zVertOff = z+chunkY*16
-
         // add the verts for all faces
         // TODO: dont add unused verts
         mesh.verts += floatArrayOf(
-             0.5f+xVertOff, -0.5f+y,  0.5f+zVertOff,
-            -0.5f+xVertOff, -0.5f+y,  0.5f+zVertOff,
-            -0.5f+xVertOff,  0.5f+y,  0.5f+zVertOff,
-             0.5f+xVertOff,  0.5f+y,  0.5f+zVertOff,
-             0.5f+xVertOff, -0.5f+y, -0.5f+zVertOff,
-            -0.5f+xVertOff, -0.5f+y, -0.5f+zVertOff,
-            -0.5f+xVertOff,  0.5f+y, -0.5f+zVertOff,
-             0.5f+xVertOff,  0.5f+y, -0.5f+zVertOff,
+             0.5f+x, -0.5f+y,  0.5f+z,
+            -0.5f+x, -0.5f+y,  0.5f+z,
+            -0.5f+x,  0.5f+y,  0.5f+z,
+             0.5f+x,  0.5f+y,  0.5f+z,
+             0.5f+x, -0.5f+y, -0.5f+z,
+            -0.5f+x, -0.5f+y, -0.5f+z,
+            -0.5f+x,  0.5f+y, -0.5f+z,
+             0.5f+x,  0.5f+y, -0.5f+z,
         )
     }
 
@@ -154,7 +157,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
      */
     fun setBlock(coords: Vector3i, newBlock: Boolean) = setBlock(coords.x, coords.y, coords.z, newBlock)
 
-    override fun render() = this.mesh.render()
+    override fun render(renderer: Renderer) = this.mesh.render(renderer)
 
     override fun fini() = this.mesh.fini()
 

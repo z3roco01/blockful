@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL33.*
 import org.lwjgl.system.MemoryUtil
 import org.lwjgl.system.MemoryUtil.memFree
 import z3roco01.blockful.render.Renderable
+import z3roco01.blockful.render.Renderer
 
 /**
  * a class for each mesh, handles the initialization and rendering of it
@@ -78,7 +79,7 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
     /**
      * handles the rendering of the mesh
      */
-    override fun render() {
+    override fun render(renderer: Renderer) {
         // bind this meshes vertex array
         glBindVertexArray(this.vaoId)
         // enable the position and colour attributes

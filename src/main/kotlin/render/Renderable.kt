@@ -11,8 +11,9 @@ interface Renderable {
 
     /**
      * called to render the object
+     * @param renderer the [Renderer] that is rendering this
      */
-    fun render()
+    fun render(renderer: Renderer)
 
     /**
      * called to de initialize the object
