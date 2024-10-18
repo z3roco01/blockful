@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.game.Chunk
 import z3roco01.blockful.math.Colour
-import z3roco01.blockful.render.mesh.Mesh
 import z3roco01.blockful.render.shader.ShaderProgram
 
 /**
@@ -31,7 +30,6 @@ class Renderer {
         this.shader.init()
         this.chunk.init()
 
-        println("${clearColour.rFloat()} ${clearColour.gFloat()} ${clearColour.bFloat()}")
         glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
         // create a uniform for the projection and matrices

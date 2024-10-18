@@ -32,10 +32,10 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         this.idxVboId = glGenBuffers()
         this.colourVboId = glGenBuffers()
 
-        updateMesh()
+        rebuildMesh()
     }
 
-    fun updateMesh() {
+    fun rebuildMesh() {
         // Create a buffer for the vertices and flip to reset to position
         val vertBuf = MemoryUtil.memAllocFloat(verts.size)
         vertBuf.put(verts).flip()
