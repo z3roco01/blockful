@@ -103,17 +103,21 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             )
         }
 
+        // add the chunk offset times 16 since chunks are 16 blocks on the x and z
+        val xVertOff = x+chunkX*16
+        val zVertOff = z+chunkY*16
+
         // add the verts for all faces
         // TODO: dont add unused verts
         mesh.verts += floatArrayOf(
-             0.5f+x, -0.5f+y,  0.5f+z,
-            -0.5f+x, -0.5f+y,  0.5f+z,
-            -0.5f+x,  0.5f+y,  0.5f+z,
-             0.5f+x,  0.5f+y,  0.5f+z,
-             0.5f+x, -0.5f+y, -0.5f+z,
-            -0.5f+x, -0.5f+y, -0.5f+z,
-            -0.5f+x,  0.5f+y, -0.5f+z,
-             0.5f+x,  0.5f+y, -0.5f+z,
+             0.5f+xVertOff, -0.5f+y,  0.5f+zVertOff,
+            -0.5f+xVertOff, -0.5f+y,  0.5f+zVertOff,
+            -0.5f+xVertOff,  0.5f+y,  0.5f+zVertOff,
+             0.5f+xVertOff,  0.5f+y,  0.5f+zVertOff,
+             0.5f+xVertOff, -0.5f+y, -0.5f+zVertOff,
+            -0.5f+xVertOff, -0.5f+y, -0.5f+zVertOff,
+            -0.5f+xVertOff,  0.5f+y, -0.5f+zVertOff,
+             0.5f+xVertOff,  0.5f+y, -0.5f+zVertOff,
         )
     }
 

@@ -19,6 +19,7 @@ class Renderer {
     private val shader = ShaderProgram("main")
 
     private val chunk = Chunk(0, 0)
+    private val chunk2 = Chunk(2, 2)
 
     fun init() {
         // if it cannot init glfw, throw
@@ -29,6 +30,7 @@ class Renderer {
         this.window.init()
         this.shader.init()
         this.chunk.init()
+        this.chunk2.init()
 
         glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
@@ -66,6 +68,9 @@ class Renderer {
 
         this.shader.setUniform("worldMatrix", this.chunk.mesh.transformation.getWorldMatrix())
         this.chunk.render()
+
+        this.shader.setUniform("worldMatrix", this.chunk2.mesh.transformation.getWorldMatrix())
+        this.chunk2.render()
 
         // unbind the shader
         this.shader.unbind()
