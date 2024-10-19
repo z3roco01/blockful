@@ -80,6 +80,7 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
      * handles the rendering of the mesh
      */
     override fun render(renderer: Renderer) {
+        renderer.shader.setUniform("worldMatrix", this.transformation.getWorldMatrix())
         // bind this meshes vertex array
         glBindVertexArray(this.vaoId)
         // enable the position and colour attributes

@@ -3,8 +3,7 @@ package z3roco01.blockful.render
 import org.lwjgl.glfw.GLFW.glfwInit
 import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
-import z3roco01.blockful.game.Chunk
-import z3roco01.blockful.game.ChunkManager
+import z3roco01.blockful.game.chunk.Chunk
 import z3roco01.blockful.math.Colour
 import z3roco01.blockful.render.shader.ShaderProgram
 
@@ -21,7 +20,7 @@ class Renderer {
 
     private val chunk = Chunk(0, 0)
     private val chunk2 = Chunk(2, 2)
-    private val chunkManager = ChunkManager()
+    //private val chunkManager = ChunkManager()
 
     fun init() {
         // if it cannot init glfw, throw
@@ -31,7 +30,8 @@ class Renderer {
         // init everything
         this.window.init()
         this.shader.init()
-        this.chunkManager.init()
+        this.chunk.init()
+        //this.chunkManager.init()
 
         glClearColor(clearColour.rFloat(), clearColour.gFloat(), clearColour.bFloat(), clearColour.aFloat())
 
@@ -67,7 +67,8 @@ class Renderer {
         // set the projection matrix to the cameras projection matrix
         this.shader.setUniform("projMatrix", camera.getProjectionMatrix(window.getAspectRatio()))
 
-        this.chunkManager.render(this)
+        this.chunk.render(this)
+        //this.chunkManager.render(this)
 
         // unbind the shader
         this.shader.unbind()
@@ -79,7 +80,8 @@ class Renderer {
      * handles the closing of everything
      */
     fun fini() {
-        this.chunkManager.fini()
+        //this.chunkManager.fini()
+        this.chunk.fini()
         this.shader.fini()
         this.window.fini()
     }

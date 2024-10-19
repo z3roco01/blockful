@@ -1,4 +1,4 @@
-package z3roco01.blockful.game
+package z3roco01.blockful.game.chunk
 
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.Renderer
@@ -28,11 +28,8 @@ class ChunkManager: Renderable {
 
     override fun render(renderer: Renderer) {
         // loop over every chunk and render it
-        // loop over every chunk and init it
         for(x in 0..15) {
             for(y in 0..15) {
-                // set the world matrix
-                renderer.shader.setUniform("worldMatrix", chunks[x][y].mesh.transformation.getWorldMatrix())
                 chunks[x][y].render(renderer)
             }
         }

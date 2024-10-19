@@ -1,4 +1,4 @@
-package z3roco01.blockful.game
+package z3roco01.blockful.game.chunk
 
 import org.joml.Vector3i
 import z3roco01.blockful.render.Renderable
@@ -28,6 +28,23 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     }
 
     /**
+     * creates the worst case mesh, an alternating checkerboard, meaning all cubes will have all faces rendered
+     * for testing only
+     */
+    fun makeWorstCase() {
+        for(y in 0..127) {
+            for(x in 0..15) {
+                for(z in 0..15) {
+                    if(z % 2 == y%2)
+                        blocks[y][x][z] = x%2 == 0
+                    else
+                        blocks[y][x][z] = x%2 != 0
+                }
+            }
+        }
+    }
+
+    /**
      * rebuilds the mesh based on [Chunk.blocks] by using [Mesh.rebuildMesh] and [Chunk.addVoxel]
      */
     fun rebuildMesh() {
@@ -35,10 +52,9 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         this.mesh.indices = intArrayOf()
         this.mesh.verts = floatArrayOf()
 
-        Thread(Runnable({
-            addAllVoxels()
-            this.mesh.rebuildMesh()
-        })).start()
+        addAllVoxels()
+
+        this.mesh.rebuildMesh()
     }
 
     /**
