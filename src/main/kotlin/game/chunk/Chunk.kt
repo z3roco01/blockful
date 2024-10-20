@@ -4,6 +4,10 @@ import org.joml.Vector3i
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.Renderer
 import z3roco01.blockful.render.mesh.Mesh
+import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 /**
  * holds the data and handles mesh creation for a chunk of the world
@@ -13,7 +17,7 @@ import z3roco01.blockful.render.mesh.Mesh
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     private val blocks = Array(128){Array(16){Array(16){true}}}
 
-    val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf())
+    val mesh = Mesh(floatArrayOf(), IntArray(0), floatArrayOf())
 
     init {
         // add the chunk position to the transform
@@ -49,7 +53,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
      */
     fun rebuildMesh() {
         // empty arrays
-        this.mesh.indices = intArrayOf()
+        this.mesh.indices = IntArray(1180000)
         this.mesh.verts = floatArrayOf()
 
         addAllVoxels()
@@ -60,13 +64,107 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     /**
      * loops over every voxel and calls [Chunk.addVoxel] for it
      */
+    @OptIn(ExperimentalTime::class)
     private fun addAllVoxels() {
-        for(y in 0..127) {
-            for(x in 0..15) {
-                for(z in 0..15)
-                    addVoxel(x, y, z)
+        var indOffset = 0
+        mesh.indices = IntArray(1180000)
+        println(measureTime {
+            for(y in 0..127) {
+                for(x in 0..15) {
+                    for(z in 0..15) {
+                        indOffset += newAddVoxel(x, y, z, indOffset)
+                    }
+                }
             }
+            mesh.indices = mesh.indices.copyOf(indOffset+1)
+        })
+        println(mesh.indices.size)
+    }
+
+    /**
+     * adds a voxel to the mesh at the supplied coords, for tesitng optimization
+     * @param x the x part of the coordinate
+     * @param y the y part of the coordinate
+     * @param z the z part of the coordinate
+     */
+    private fun newAddVoxel(x: Int, y: Int, z: Int, indArrayOffset: Int): Int {
+        // could prob be v optimized but im washed at graphics programming
+
+        // if there is no block there, then dont add one
+        if(!getBlock(x, y, z)) return 0
+
+        var indicesOffset = mesh.verts.size/3
+        var usedInds = 0
+
+        if(!getBlock(x-1, y, z)) {
+            mesh.indices[indArrayOffset] = 1+indicesOffset
+            mesh.indices[indArrayOffset+1] = 2+indicesOffset
+            mesh.indices[indArrayOffset+2] = 5+indicesOffset
+            mesh.indices[indArrayOffset+3] = 2+indicesOffset
+            mesh.indices[indArrayOffset+4] = 6+indicesOffset
+            mesh.indices[indArrayOffset+5] = 5+indicesOffset
+            usedInds += 6
         }
+        if(!getBlock(x+1, y, z)) {
+            mesh.indices[indArrayOffset+usedInds] = 4+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+1] = 7+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+3] = 7+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+4] = 3+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+5] = 0+indicesOffset
+            usedInds += 6
+        }
+        if(!getBlock(x, y+1, z)) {
+            mesh.indices[indArrayOffset+usedInds] = 2+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+1] = 3+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+2] = 7+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+3] = 7+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+4] = 6+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+5] = 2+indicesOffset
+            usedInds += 6
+        }
+        if(!getBlock(x, y-1, z)) {
+            mesh.indices[indArrayOffset+usedInds] = 1+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+1] = 5+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+3] = 5+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+4] = 4+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+5] = 0+indicesOffset
+            usedInds += 6
+        }
+        if(!getBlock(x, y, z-1)) {
+            mesh.indices[indArrayOffset+usedInds] = 4+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+1] = 6+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+2] = 4+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+3] = 6+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+4] = 7+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+5] = 4+indicesOffset
+            usedInds += 6
+        }
+        if(!getBlock(x, y, z+1)) {
+            mesh.indices[indArrayOffset+usedInds] = 2+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+1] = 1+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+3] = 3+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+4] = 2+indicesOffset
+            mesh.indices[indArrayOffset+usedInds+5] = 0+indicesOffset
+            usedInds += 6
+        }
+
+        // add the verts for all faces
+        // TODO: dont add unused verts
+        mesh.verts += floatArrayOf(
+             0.5f+x, -0.5f+y,  0.5f+z,
+            -0.5f+x, -0.5f+y,  0.5f+z,
+            -0.5f+x,  0.5f+y,  0.5f+z,
+             0.5f+x,  0.5f+y,  0.5f+z,
+             0.5f+x, -0.5f+y, -0.5f+z,
+            -0.5f+x, -0.5f+y, -0.5f+z,
+            -0.5f+x,  0.5f+y, -0.5f+z,
+             0.5f+x,  0.5f+y, -0.5f+z,
+        )
+
+        return usedInds
     }
 
     /**
