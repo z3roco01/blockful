@@ -97,6 +97,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         var usedInds = 0
 
         if(!getBlock(x-1, y, z)) {
+            // left face
             mesh.indices[indArrayOffset] = 1+indicesOffset
             mesh.indices[indArrayOffset+1] = 2+indicesOffset
             mesh.indices[indArrayOffset+2] = 5+indicesOffset
@@ -106,6 +107,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             usedInds += 6
         }
         if(!getBlock(x+1, y, z)) {
+            // right face
             mesh.indices[indArrayOffset+usedInds] = 4+indicesOffset
             mesh.indices[indArrayOffset+usedInds+1] = 7+indicesOffset
             mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
@@ -115,6 +117,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             usedInds += 6
         }
         if(!getBlock(x, y+1, z)) {
+            // top face
             mesh.indices[indArrayOffset+usedInds] = 2+indicesOffset
             mesh.indices[indArrayOffset+usedInds+1] = 3+indicesOffset
             mesh.indices[indArrayOffset+usedInds+2] = 7+indicesOffset
@@ -124,6 +127,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             usedInds += 6
         }
         if(!getBlock(x, y-1, z)) {
+            // bottom face
             mesh.indices[indArrayOffset+usedInds] = 1+indicesOffset
             mesh.indices[indArrayOffset+usedInds+1] = 5+indicesOffset
             mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
@@ -133,7 +137,8 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             usedInds += 6
         }
         if(!getBlock(x, y, z-1)) {
-            mesh.indices[indArrayOffset+usedInds] = 4+indicesOffset
+            // back face
+            mesh.indices[indArrayOffset+usedInds] = 5+indicesOffset
             mesh.indices[indArrayOffset+usedInds+1] = 6+indicesOffset
             mesh.indices[indArrayOffset+usedInds+2] = 4+indicesOffset
             mesh.indices[indArrayOffset+usedInds+3] = 6+indicesOffset
@@ -142,6 +147,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             usedInds += 6
         }
         if(!getBlock(x, y, z+1)) {
+            // front face
             mesh.indices[indArrayOffset+usedInds] = 2+indicesOffset
             mesh.indices[indArrayOffset+usedInds+1] = 1+indicesOffset
             mesh.indices[indArrayOffset+usedInds+2] = 0+indicesOffset
