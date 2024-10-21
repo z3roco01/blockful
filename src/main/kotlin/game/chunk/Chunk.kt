@@ -13,7 +13,7 @@ import z3roco01.blockful.render.mesh.Mesh
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     private val blocks = Array(128){Array(16){Array(16){true}}}
 
-    val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf())
+    val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf(), intArrayOf())
 
     init {
         // add the chunk position to the transform
@@ -50,6 +50,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     fun rebuildMesh() {
         // empty arrays
         this.mesh.indices = intArrayOf()
+        this.mesh.directions = intArrayOf()
         this.mesh.verts = floatArrayOf()
 
         addAllVoxels()
@@ -85,16 +86,24 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
 
         if(!getBlock(x-1, y, z)) {
             mesh.indices += intArrayOf(
-                // left face
+                // west face
                 1+indicesOffset, 2+indicesOffset, 5+indicesOffset,
                 2+indicesOffset, 6+indicesOffset, 5+indicesOffset,
+            )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.WEST.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
+                Mesh.Direction.WEST.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
             )
         }
         if(!getBlock(x+1, y, z)) {
             mesh.indices += intArrayOf(
-                // right face
+                // east face
                 4 + indicesOffset, 7 + indicesOffset, 0 + indicesOffset,
                 7 + indicesOffset, 3 + indicesOffset, 0 + indicesOffset,
+            )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.EAST.number, Mesh.Direction.EAST.number, Mesh.Direction.EAST.number,
+                Mesh.Direction.EAST.number, Mesh.Direction.EAST.number, Mesh.Direction.EAST.number
             )
         }
         if(!getBlock(x, y+1, z)) {
@@ -103,6 +112,10 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 2+indicesOffset, 3+indicesOffset, 7+indicesOffset,
                 7+indicesOffset, 6+indicesOffset, 2+indicesOffset,
             )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.TOP.number, Mesh.Direction.TOP.number, Mesh.Direction.TOP.number,
+                Mesh.Direction.TOP.number, Mesh.Direction.TOP.number, Mesh.Direction.TOP.number
+            )
         }
         if(!getBlock(x, y-1, z)) {
             mesh.indices += intArrayOf(
@@ -110,19 +123,31 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 1+indicesOffset, 5+indicesOffset, 0+indicesOffset,
                 5+indicesOffset, 4+indicesOffset, 0+indicesOffset
             )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number,
+                Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number
+            )
         }
         if(!getBlock(x, y, z-1)) {
             mesh.indices += intArrayOf(
-                // back face
+                // south face
                 5+indicesOffset, 6+indicesOffset, 4+indicesOffset,
                 6+indicesOffset, 7+indicesOffset, 4+indicesOffset,
+            )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.SOUTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
+                Mesh.Direction.SOUTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
             )
         }
         if(!getBlock(x, y, z+1)) {
             mesh.indices += intArrayOf(
-                // front face
+                // north face
                 2+indicesOffset, 1+indicesOffset, 0+indicesOffset,
                 3+indicesOffset, 2+indicesOffset, 0+indicesOffset,
+            )
+            mesh.directions += intArrayOf(
+                Mesh.Direction.NORTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
+                Mesh.Direction.NORTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
             )
         }
 

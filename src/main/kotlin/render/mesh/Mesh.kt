@@ -13,12 +13,14 @@ import z3roco01.blockful.render.Renderer
  * @param verts a [FloatArray] containing the positions of every vertex
  * @param indices a [IntArray] containing the indices from the verts for each vertex
  * @param colours a [FloatArray] containing the colours for each index
+ * @param directions a
  */
-open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: FloatArray): GameObject(), Renderable {
+open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: FloatArray, var directions: IntArray): GameObject(), Renderable {
     private var vaoId: Int = 0
     private var vertsVboId: Int = 0
     private var idxVboId: Int = 0
     private var colourVboId: Int = 0
+    private var directionsVboId: Int = 0
 
     /**
      * called before it can be rendered,
@@ -72,6 +74,17 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         glBufferData(GL_ARRAY_BUFFER, colourBuf, GL_STATIC_DRAW)
 
         memFree(colourBuf)
+        glBindBuffer(GL_INT_SAMPLER_BUFFER, 0)
+
+        // create the buffer for the colours
+        val directionBuf = MemoryUtil.memAllocInt(directions.size)
+        directionBuf.put(directions).flip()
+
+        // create a vbo for the colours
+        glBindBuffer(GL_INT_SAMPLER_BUFFER, this.directionsVboId)
+        glBufferData(GL_ARRAY_BUFFER, directions, GL_STATIC_DRAW)
+
+        memFree(directionBuf)
 
         glBindVertexArray(0)
     }
@@ -113,5 +126,17 @@ open class Mesh(var verts: FloatArray, var indices: IntArray, val colours: Float
         // do the same for the vao
         glBindVertexArray(0)
         glDeleteVertexArrays(this.vaoId)
+    }
+
+    /**
+     * enum for each faces direction, used for shading
+     */
+    enum class Direction(val number: Int) {
+        TOP(0),
+        BOTTOM(1),
+        NORTH(2),
+        EAST(3),
+        WEST(4),
+        SOUTH(5)
     }
 }

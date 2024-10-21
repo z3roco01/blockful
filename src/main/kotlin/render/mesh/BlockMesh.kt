@@ -29,5 +29,6 @@ class BlockMesh(colours: FloatArray): Mesh(
         1, 5, 0,
         5, 4, 0
     ),
-    colours
+    colours,
+    intArrayOf(0)
 )
