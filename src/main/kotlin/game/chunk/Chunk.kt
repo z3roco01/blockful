@@ -17,7 +17,7 @@ import kotlin.time.measureTime
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     private val blocks = BooleanArray(128 * 16 * 16)
 
-    val mesh = Mesh(floatArrayOf(), IntArray(0), floatArrayOf())
+    val mesh = Mesh(verts = FloatArray(blocks.size * 8 * 3), IntArray(0), floatArrayOf())
 
     init {
         // add the chunk position to the transform
@@ -61,7 +61,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     fun rebuildMesh() {
         // empty arrays
         this.mesh.indices = IntArray(1180000)
-        this.mesh.verts = floatArrayOf()
+        this.mesh.verts.fill(0f)
 
         addAllVoxels()
 
@@ -166,7 +166,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
 
         // add the verts for all faces
         // TODO: dont add unused verts
-        mesh.verts += floatArrayOf(
+        floatArrayOf(
              0.5f+x, -0.5f+y,  0.5f+z,
             -0.5f+x, -0.5f+y,  0.5f+z,
             -0.5f+x,  0.5f+y,  0.5f+z,
@@ -175,7 +175,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             -0.5f+x, -0.5f+y, -0.5f+z,
             -0.5f+x,  0.5f+y, -0.5f+z,
              0.5f+x,  0.5f+y, -0.5f+z,
-        )
+        ).copyInto(mesh.verts, blockIndex(x, y, z) * 8 * 3)
 
         return usedInds
     }
