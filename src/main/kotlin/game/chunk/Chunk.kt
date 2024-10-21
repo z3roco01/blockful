@@ -15,9 +15,9 @@ import kotlin.time.measureTime
  * @param chunkY the y coordinate of the chunk
  */
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
-    private val blocks = BooleanArray(128 * 128 * 16)
+    private val blocks = BooleanArray(128 * 16 * 16)
 
-    val mesh = Mesh(floatArrayOf(), IntArray(0), floatArrayOf())
+    val mesh = Mesh(verts = FloatArray(blocks.size * 8 * 3), IntArray(0), floatArrayOf())
 
     init {
         // add the chunk position to the transform
@@ -61,7 +61,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     fun rebuildMesh() {
         // empty arrays
         this.mesh.indices = IntArray(1180000)
-        this.mesh.verts = floatArrayOf()
+        this.mesh.verts.fill(0f)
 
         addAllVoxels()
 
@@ -166,7 +166,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
 
         // add the verts for all faces
         // TODO: dont add unused verts
-        mesh.verts += floatArrayOf(
+        floatArrayOf(
              0.5f+x, -0.5f+y,  0.5f+z,
             -0.5f+x, -0.5f+y,  0.5f+z,
             -0.5f+x,  0.5f+y,  0.5f+z,
@@ -175,7 +175,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             -0.5f+x, -0.5f+y, -0.5f+z,
             -0.5f+x,  0.5f+y, -0.5f+z,
              0.5f+x,  0.5f+y, -0.5f+z,
-        )
+        ).copyInto(mesh.verts, blockIndex(x, y, z) * 8 * 3)
 
         return usedInds
     }
@@ -260,7 +260,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     fun getBlock(x: Int, y: Int, z: Int): Boolean {
         if(x > 15 || x < 0 || y > 127 || y < 0 || z > 15 || z < 0) return false
 
-        return blocks[y*128*16 + x*16 + z]
+        return blocks[blockIndex(x, y, z)]
     }
 
     /**
@@ -274,8 +274,10 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         // check that its in bounds of the chunk
         if(x > 15 || x < 0 || y > 127 || y < 0 || z > 15 || z < 0) return
 
-        blocks[y*128*16 + x*16 + z] = newBlock
+        blocks[blockIndex(x, y, z)] = newBlock
     }
+
+    private fun blockIndex(x: Int, y: Int, z: Int) = y*16*16 + x*16 + z
 
     /**
      * same as [Chunk.setBlock] but it takes a vector
