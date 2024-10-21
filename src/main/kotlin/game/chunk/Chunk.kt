@@ -15,7 +15,7 @@ import kotlin.time.measureTime
  * @param chunkY the y coordinate of the chunk
  */
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
-    private val blocks = Array(128){Array(16){Array(16){true}}}
+    private val blocks = BooleanArray(128 * 128 * 16)
 
     val mesh = Mesh(floatArrayOf(), IntArray(0), floatArrayOf())
 
@@ -26,6 +26,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     }
 
     override fun init() {
+        for(y in 0..127) {
+            for(x in 0..15) {
+                for(z in 0..15) {
+                    setBlock(x, y, z, true)
+                }
+            }
+        }
         addAllVoxels()
 
         this.mesh.init()
@@ -40,9 +47,9 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
             for(x in 0..15) {
                 for(z in 0..15) {
                     if(z % 2 == y%2)
-                        blocks[y][x][z] = x%2 == 0
+                        setBlock(x, y, z, x%2 == 0)
                     else
-                        blocks[y][x][z] = x%2 != 0
+                        setBlock(x, y, z, x%2 != 0)
                 }
             }
         }
@@ -253,7 +260,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     fun getBlock(x: Int, y: Int, z: Int): Boolean {
         if(x > 15 || x < 0 || y > 127 || y < 0 || z > 15 || z < 0) return false
 
-        return blocks[y][x][z]
+        return blocks[y*128*16 + x*16 + z]
     }
 
     /**
@@ -267,7 +274,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         // check that its in bounds of the chunk
         if(x > 15 || x < 0 || y > 127 || y < 0 || z > 15 || z < 0) return
 
-        blocks[y][x][z] = newBlock
+        blocks[y*128*16 + x*16 + z] = newBlock
     }
 
     /**
