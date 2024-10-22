@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWKeyCallbackI
 import org.lwjgl.opengl.GL33.*
 import z3roco01.blockful.game.chunk.Chunk
 import z3roco01.blockful.math.Colour
+import z3roco01.blockful.render.mesh.BlockMesh
 import z3roco01.blockful.render.shader.ShaderProgram
 
 /**
