@@ -201,6 +201,12 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         blocks[blockIndex(x, y, z)] = newBlock
     }
 
+    /**
+     * returns the index for the block at that position
+     * @param x the x part of the coordinate
+     * @param y the y part of the coordinate
+     * @param z the z part of the coordinate
+     */
     private fun blockIndex(x: Int, y: Int, z: Int) = y*16*16 + x*16 + z
 
     /**
