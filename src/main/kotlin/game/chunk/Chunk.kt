@@ -11,7 +11,7 @@ import z3roco01.blockful.render.mesh.Mesh
  * @param chunkY the y coordinate of the chunk
  */
 class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
-    private val blocks = Array(128){Array(16){Array(16){true}}}
+    private val blocks = Array(128){Array(16){Array(16){false}}}
 
     val mesh = Mesh(floatArrayOf(), intArrayOf(), floatArrayOf(), intArrayOf())
 
@@ -22,6 +22,12 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     }
 
     override fun init() {
+        for(y in 0..7) {
+            for(x in 0..15) {
+                for(z in 0..15)
+                    setBlock(x, y, z, true)
+            }
+        }
         addAllVoxels()
 
         this.mesh.init()
@@ -45,7 +51,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
     }
 
     /**
-     * rebuilds the mesh based on [Chunk.blocks] by using [Mesh.rebuildMesh] and [Chunk.addVoxel]
+     * rebuilds the mesh based on [Chunk.blocks] by using [Mesh.build] and [Chunk.addVoxel]
      */
     fun rebuildMesh() {
         // empty arrays
@@ -55,7 +61,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
 
         addAllVoxels()
 
-        this.mesh.rebuildMesh()
+        this.mesh.build()
     }
 
     /**
@@ -90,9 +96,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 1+indicesOffset, 2+indicesOffset, 5+indicesOffset,
                 2+indicesOffset, 6+indicesOffset, 5+indicesOffset,
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.WEST.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
                 Mesh.Direction.WEST.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
         if(!getBlock(x+1, y, z)) {
@@ -101,9 +111,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 4 + indicesOffset, 7 + indicesOffset, 0 + indicesOffset,
                 7 + indicesOffset, 3 + indicesOffset, 0 + indicesOffset,
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.EAST.number, Mesh.Direction.EAST.number, Mesh.Direction.EAST.number,
                 Mesh.Direction.EAST.number, Mesh.Direction.EAST.number, Mesh.Direction.EAST.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
         if(!getBlock(x, y+1, z)) {
@@ -112,9 +126,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 2+indicesOffset, 3+indicesOffset, 7+indicesOffset,
                 7+indicesOffset, 6+indicesOffset, 2+indicesOffset,
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.TOP.number, Mesh.Direction.TOP.number, Mesh.Direction.TOP.number,
                 Mesh.Direction.TOP.number, Mesh.Direction.TOP.number, Mesh.Direction.TOP.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
         if(!getBlock(x, y-1, z)) {
@@ -123,9 +141,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 1+indicesOffset, 5+indicesOffset, 0+indicesOffset,
                 5+indicesOffset, 4+indicesOffset, 0+indicesOffset
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number,
                 Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number, Mesh.Direction.BOTTOM.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
         if(!getBlock(x, y, z-1)) {
@@ -134,9 +156,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 5+indicesOffset, 6+indicesOffset, 4+indicesOffset,
                 6+indicesOffset, 7+indicesOffset, 4+indicesOffset,
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.SOUTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
                 Mesh.Direction.SOUTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
         if(!getBlock(x, y, z+1)) {
@@ -145,9 +171,13 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
                 2+indicesOffset, 1+indicesOffset, 0+indicesOffset,
                 3+indicesOffset, 2+indicesOffset, 0+indicesOffset,
             )
-            mesh.directions += intArrayOf(
+            /*mesh.directions += intArrayOf(
                 Mesh.Direction.NORTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number,
                 Mesh.Direction.NORTH.number, Mesh.Direction.WEST.number, Mesh.Direction.WEST.number
+            )*/
+            mesh.directions += intArrayOf(
+                1, 1, 1,
+                1, 1, 1
             )
         }
 
