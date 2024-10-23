@@ -66,13 +66,16 @@ class VBO<T>(var data: Array<T>, val type: Int, val buffer: Int, val index: Int,
             }
         }
 
-        // set the description for this vbo
-        when(this.type) {
-            GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT, GL_INT, GL_UNSIGNED_INT ->
-                // create an integer attribute pointer
-                glVertexAttribIPointer(this.index, this.size, this.type, this.stride, this.offset)
-            // create a float attribute pointer
-            GL_FLOAT -> glVertexAttribPointer(this.index, this.size, this.type, this.normalized, this.stride, this.offset)
+        // GL_ELEMENT_ARRAY_BUFFER does not need to be described
+        if(this.type != GL_ELEMENT_ARRAY_BUFFER) {
+            // set the description for this vbo
+            when(this.type) {
+                GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT, GL_INT, GL_UNSIGNED_INT ->
+                    // create an integer attribute pointer
+                    glVertexAttribIPointer(this.index, this.size, this.type, this.stride, this.offset)
+                // create a float attribute pointer
+                GL_FLOAT -> glVertexAttribPointer(this.index, this.size, this.type, this.normalized, this.stride, this.offset)
+            }
         }
 
         // unbind the buffer
