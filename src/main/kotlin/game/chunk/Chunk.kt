@@ -1,6 +1,7 @@
 package z3roco01.blockful.game.chunk
 
 import org.joml.Vector3i
+import z3roco01.blockful.render.Camera
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.Renderer
 import z3roco01.blockful.render.mesh.Mesh
@@ -21,7 +22,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         this.mesh.transformation.position.z += chunkY*16
     }
 
-    override fun init() {
+    override fun init(renderer: Renderer) {
         for(y in 0..7) {
             for(x in 0..15) {
                 for(z in 0..15)
@@ -30,7 +31,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
         }
         addAllVoxels()
 
-        this.mesh.init()
+        this.mesh.init(renderer)
     }
 
     /**
@@ -179,7 +180,7 @@ class Chunk(val chunkX: Int, val chunkY: Int): Renderable {
      */
     fun setBlock(coords: Vector3i, newBlock: Boolean) = setBlock(coords.x, coords.y, coords.z, newBlock)
 
-    override fun render(renderer: Renderer) = this.mesh.render(renderer)
+    override fun render(renderer: Renderer, camera: Camera) = this.mesh.render(renderer, camera)
 
     override fun fini() = this.mesh.fini()
 

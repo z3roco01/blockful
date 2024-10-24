@@ -6,14 +6,15 @@ package z3roco01.blockful.render
 interface Renderable {
     /**
      * called to initialize the object
+     * @param renderer the [Renderer] that is rendering this
      */
-    fun init()
+    fun init(renderer: Renderer)
 
     /**
      * called to render the object
      * @param renderer the [Renderer] that is rendering this
      */
-    fun render(renderer: Renderer)
+    fun render(renderer: Renderer, camera: Camera)
 
     /**
      * called to de initialize the object

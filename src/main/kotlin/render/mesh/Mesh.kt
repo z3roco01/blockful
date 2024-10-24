@@ -2,8 +2,10 @@ package z3roco01.blockful.render.mesh
 
 import game.gameobject.GameObject
 import org.lwjgl.opengl.GL33.*
+import z3roco01.blockful.render.Camera
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.Renderer
+import z3roco01.blockful.render.shader.ShaderProgram
 
 /**
  * a class for each mesh, handles the initialization and rendering of it
@@ -29,6 +31,9 @@ open class Mesh(): GameObject(), Renderable {
             colourVBO.data = value
         }
 
+    // the shader program
+    val shader = ShaderProgram("main")
+
     private var vaoId: Int = 0
     private var vertsVbo = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 0, 3, false, 0, 0)
     private var indicesVBO = VBO(emptyArray<Int>(), GL_INT, GL_ELEMENT_ARRAY_BUFFER, 0, 3, false, 0, 0)
@@ -37,7 +42,12 @@ open class Mesh(): GameObject(), Renderable {
     /**
      * called before it can be rendered,
      */
-    override fun init() {
+    override fun init(renderer: Renderer) {
+        this.shader.init()
+        // create a uniform for the projection and world matrices
+        this.shader.createUniformLocation("projMatrix")
+        this.shader.createUniformLocation("worldMatrix")
+
         // Create the vertex array object(vao) id and bind it
         this.vaoId = glGenVertexArrays()
         glBindVertexArray(this.vaoId)
@@ -59,8 +69,13 @@ open class Mesh(): GameObject(), Renderable {
     /**
      * handles the rendering of the mesh
      */
-    override fun render(renderer: Renderer) {
-        renderer.shader.setUniform("worldMatrix", this.transformation.getWorldMatrix())
+    override fun render(renderer: Renderer, camera: Camera) {
+        // bind the shader
+        this.shader.bind()
+        // set the projection matrix to the cameras projection matrix
+        this.shader.setUniform("projMatrix", camera.getProjectionMatrix(renderer.window.getAspectRatio()))
+        this.shader.setUniform("worldMatrix", this.transformation.getWorldMatrix())
+
         // bind this meshes vertex array
         glBindVertexArray(this.vaoId)
 
@@ -77,12 +92,17 @@ open class Mesh(): GameObject(), Renderable {
 
         // unbind the vertexes
         glBindVertexArray(0)
+
+        // unbind the shader
+        this.shader.unbind()
     }
 
     /**
      * free all memory and unbind/destroy everything, called once this mesh is no longer used
      */
     override fun fini() {
+        this.shader.fini()
+
         glDisableVertexAttribArray(0)
 
         // unbind and delete the vbo
