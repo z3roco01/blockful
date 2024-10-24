@@ -11,7 +11,6 @@ import z3roco01.blockful.render.Renderer
  * @param verts a [FloatArray] containing the positions of every vertex
  * @param indices a [IntArray] containing the indices from the verts for each vertex
  * @param colours a [FloatArray] containing the colours for each index
- * @param directions a
  */
 open class Mesh(): GameObject(), Renderable {
     var verts: Array<Float>
@@ -29,17 +28,11 @@ open class Mesh(): GameObject(), Renderable {
         set(value) {
             colourVBO.data = value
         }
-    var directions: Array<Int>
-        get() = dirsVBO.data
-        set(value) {
-            dirsVBO.data = value
-        }
 
     private var vaoId: Int = 0
     private var vertsVbo = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 0, 3, false, 0, 0)
     private var indicesVBO = VBO(emptyArray<Int>(), GL_INT, GL_ELEMENT_ARRAY_BUFFER, 0, 3, false, 0, 0)
     private var colourVBO = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 1, 3, false, 0, 0)
-    private var dirsVBO = VBO(emptyArray<Int>(), GL_INT, GL_ARRAY_BUFFER, 2, 1, false, 0, 0)
 
     /**
      * called before it can be rendered,
@@ -53,7 +46,6 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.init()
         indicesVBO.init()
         colourVBO.init()
-        dirsVBO.init()
 
         build()
     }
@@ -62,7 +54,6 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.create()
         indicesVBO.create()
         colourVBO.create()
-        dirsVBO.create()
     }
 
     /**
@@ -76,7 +67,6 @@ open class Mesh(): GameObject(), Renderable {
         // enable the position and colour attributes
         vertsVbo.enable()
         colourVBO.enable()
-        dirsVBO.enable()
 
         // draw the vertices with as triangles
         glDrawElements(GL_TRIANGLES, indices.size, GL_UNSIGNED_INT, 0)
@@ -84,7 +74,6 @@ open class Mesh(): GameObject(), Renderable {
         // disable all attributes
         vertsVbo.disable()
         colourVBO.disable()
-        dirsVBO.disable()
 
         // unbind the vertexes
         glBindVertexArray(0)
@@ -102,7 +91,6 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.fini()
         indicesVBO.fini()
         colourVBO.fini()
-        dirsVBO.fini()
 
         // do the same for the vao
         glBindVertexArray(0)
