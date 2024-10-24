@@ -67,7 +67,7 @@ class VBO<T>(var data: Array<T>, val type: Int, val buffer: Int, val index: Int,
         }
 
         // GL_ELEMENT_ARRAY_BUFFER does not need to be described
-        if(this.type != GL_ELEMENT_ARRAY_BUFFER) {
+        if(this.buffer != GL_ELEMENT_ARRAY_BUFFER) {
             // set the description for this vbo
             when(this.type) {
                 GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT, GL_UNSIGNED_SHORT, GL_INT, GL_UNSIGNED_INT ->
@@ -76,21 +76,21 @@ class VBO<T>(var data: Array<T>, val type: Int, val buffer: Int, val index: Int,
                 // create a float attribute pointer
                 GL_FLOAT -> glVertexAttribPointer(this.index, this.size, this.type, this.normalized, this.stride, this.offset)
             }
-        }
 
-        // unbind the buffer
-        glBindBuffer(this.buffer, 0)
+            // unbind the buffer
+            glBindBuffer(this.buffer, 0)
+        }
     }
 
     /**
      * calls [glEnableVertexAttribArray] on this vbo to enable it
      */
-    fun enable() = glEnableVertexAttribArray(this.id)
+    fun enable() = glEnableVertexAttribArray(this.index)
 
     /**
      * calls [glDisableVertexAttribArray] on this vbo to disable it
      */
-    fun disable() = glDisableVertexAttribArray(this.id)
+    fun disable() = glDisableVertexAttribArray(this.index)
 
     /**
      * disables the buffer and calls [glDeleteBuffers] on it

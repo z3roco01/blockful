@@ -72,6 +72,7 @@ open class Mesh(): GameObject(), Renderable {
         renderer.shader.setUniform("worldMatrix", this.transformation.getWorldMatrix())
         // bind this meshes vertex array
         glBindVertexArray(this.vaoId)
+
         // enable the position and colour attributes
         vertsVbo.enable()
         colourVBO.enable()
@@ -84,6 +85,7 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.disable()
         colourVBO.disable()
         dirsVBO.disable()
+
         // unbind the vertexes
         glBindVertexArray(0)
     }
@@ -97,7 +99,6 @@ open class Mesh(): GameObject(), Renderable {
         // unbind and delete the vbo
         glBindBuffer(GL_ARRAY_BUFFER, 0)
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-        //glDeleteBuffers(this.vertsVboId)
         vertsVbo.fini()
         indicesVBO.fini()
         colourVBO.fini()
