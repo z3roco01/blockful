@@ -1,5 +1,6 @@
 package z3roco01.blockful.game.chunk
 
+import z3roco01.blockful.render.Camera
 import z3roco01.blockful.render.Renderable
 import z3roco01.blockful.render.Renderer
 
@@ -17,20 +18,20 @@ class ChunkManager: Renderable {
         }
     }
 
-    override fun init() {
+    override fun init(renderer: Renderer) {
         // loop over every chunk and init it
         for(x in 0..15) {
             for(y in 0..15){
-                chunks[x][y].init()
+                chunks[x][y].init(renderer)
             }
         }
     }
 
-    override fun render(renderer: Renderer) {
+    override fun render(renderer: Renderer, camera: Camera) {
         // loop over every chunk and render it
         for(x in 0..15) {
             for(y in 0..15) {
-                chunks[x][y].render(renderer)
+                chunks[x][y].render(renderer, camera)
             }
         }
     }
