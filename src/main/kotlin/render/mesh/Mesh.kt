@@ -96,16 +96,4 @@ open class Mesh(): GameObject(), Renderable {
         glBindVertexArray(0)
         glDeleteVertexArrays(this.vaoId)
     }
-
-    /**
-     * enum for each faces direction, used for shading
-     */
-    enum class Direction(val number: Int) {
-        TOP(0),
-        BOTTOM(1),
-        NORTH(2),
-        EAST(3),
-        WEST(4),
-        SOUTH(5)
-    }
 }
