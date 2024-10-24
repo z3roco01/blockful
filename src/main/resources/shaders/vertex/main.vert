@@ -2,6 +2,7 @@
 
 layout (location =0) in vec3 pos;
 layout (location =1) in vec3 inColour;
+layout (location =2) in vec3 normalizedPos;
 
 out vec3 vertColour;
 uniform mat4 projMatrix;

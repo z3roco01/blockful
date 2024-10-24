@@ -38,6 +38,7 @@ open class Mesh(): GameObject(), Renderable {
     private var vertsVbo = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 0, 3, false, 0, 0)
     private var indicesVBO = VBO(emptyArray<Int>(), GL_INT, GL_ELEMENT_ARRAY_BUFFER, 0, 3, false, 0, 0)
     private var colourVBO = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 1, 3, false, 0, 0)
+    private var normalizedVertsVBO = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 2, 3, true, 0, 0)
 
     /**
      * called before it can be rendered,
@@ -56,6 +57,7 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.init()
         indicesVBO.init()
         colourVBO.init()
+        normalizedVertsVBO.init()
 
         build()
     }
@@ -64,6 +66,8 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.create()
         indicesVBO.create()
         colourVBO.create()
+        normalizedVertsVBO.data = vertsVbo.data
+        normalizedVertsVBO.create()
     }
 
     /**
@@ -82,6 +86,7 @@ open class Mesh(): GameObject(), Renderable {
         // enable the position and colour attributes
         vertsVbo.enable()
         colourVBO.enable()
+        normalizedVertsVBO.enable()
 
         // draw the vertices with as triangles
         glDrawElements(GL_TRIANGLES, indices.size, GL_UNSIGNED_INT, 0)
@@ -89,6 +94,7 @@ open class Mesh(): GameObject(), Renderable {
         // disable all attributes
         vertsVbo.disable()
         colourVBO.disable()
+        normalizedVertsVBO.disable()
 
         // unbind the vertexes
         glBindVertexArray(0)
@@ -111,6 +117,7 @@ open class Mesh(): GameObject(), Renderable {
         vertsVbo.fini()
         indicesVBO.fini()
         colourVBO.fini()
+        normalizedVertsVBO.fini()
 
         // do the same for the vao
         glBindVertexArray(0)
