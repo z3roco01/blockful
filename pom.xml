@@ -14,6 +14,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <lwjgl.version>3.3.3</lwjgl.version>
         <kotlin.version>2.0.0</kotlin.version>
+        <pngdecoder.version>1.0</pngdecoder.version>
     </properties>
 
     <repositories>
@@ -68,6 +69,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.l33tlabs.twl</groupId>
+            <artifactId>pngdecoder</artifactId>
+            <version>${pngdecoder.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.joml</groupId>
             <artifactId>joml</artifactId>

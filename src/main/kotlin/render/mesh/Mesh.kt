@@ -36,12 +36,9 @@ open class Mesh(): GameObject(), Renderable {
 
     private var vaoId: Int = 0
     private var vertsVbo = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 0, 3, false, 0, 0)
-    private var indicesVBO = VBO(emptyArray<Int>(), GL_INT, GL_ELEMENT_ARRAY_BUFFER, 0, 3, false, 0, 0)
+    private var indicesVBO = VBO(emptyArray<Int>(), GL_INT, GL_ELEMENT_ARRAY_BUFFER)
     private var colourVBO = VBO(emptyArray<Float>(), GL_FLOAT, GL_ARRAY_BUFFER, 1, 3, false, 0, 0)
 
-    /**
-     * called before it can be rendered,
-     */
     override fun init(renderer: Renderer) {
         this.shader.init()
         // create a uniform for the projection and world matrices
@@ -66,9 +63,6 @@ open class Mesh(): GameObject(), Renderable {
         colourVBO.create()
     }
 
-    /**
-     * handles the rendering of the mesh
-     */
     override fun render(renderer: Renderer, camera: Camera) {
         // bind the shader
         this.shader.bind()

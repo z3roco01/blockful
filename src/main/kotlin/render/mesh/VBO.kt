@@ -10,6 +10,8 @@ import org.lwjgl.system.MemoryUtil
  * @param buffer the GL_BUFFER of the vbo ( ex. GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER )
  */
 class VBO<T>(var data: Array<T>, val type: Int, val buffer: Int, val index: Int, val size: Int, val normalized: Boolean, val stride: Int, val offset: Long) {
+    // used for GL_ELEMENT_BUFFER since it doesnt need most of this
+    constructor(data: Array<T>, type: Int, buffer: Int): this(data, type, buffer, 0, 0, false, 0, 0)
     // the id of this vbo
     private var id: Int = 0
 
